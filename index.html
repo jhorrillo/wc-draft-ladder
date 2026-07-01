@@ -107,10 +107,22 @@ footer{margin-top:30px;text-align:center;color:var(--muted2);font-size:12px}
     <div id="schedule"></div>
   </section>
 
-  <footer>Snapshot: July 1, 2026 · all times PT</footer>
+  <footer>Snapshot: July 1, 2026 · all times PT<br><span style="opacity:.55;font-size:11px">Trophy: “Coppa del mondo” by Gambo7 · Wikimedia Commons · CC BY-SA 4.0</span></footer>
 </div>
 
 <script>
+/* ============================================================
+   LEAGUE CODING RULES (elimination order)
+   1. When two teams are knocked out in the SAME round, goal
+      differential (GD) decides elimination order — the team with
+      the worse (lower) GD is eliminated first (i.e. lands the worst
+      draft pick).
+   2. When GD is equal, the team that lost in the more embarrassing
+      fashion is eliminated first.
+      NOTE: "embarrassing" is subjective and is NOT computed here —
+      resolve equal-GD ties by hand via the ELIM_TIEBREAK map below.
+   ============================================================ */
+
 /* ---------- teams + league ---------- */
 const TEAM = {
   FRA:{f:'🇫🇷',n:'France'},      SWE:{f:'🇸🇪',n:'Sweden'},
@@ -147,8 +159,16 @@ const RESULTS = {
   qf :[null,null,null,null],
   sf :[null,null],
   champ:[null],
-  elimOrder:['GER','NED']
+  elimOrder:[]   // computed at runtime from the bracket + GD (see Coding Rules)
 };
+
+/* Goal differential per team — fill in real numbers as results come in.
+   Only eliminated teams matter for ordering; missing = 0. (Coding Rule #1) */
+const GD = { GER:-3, NED:-1 };
+
+/* Manual tiebreak for EQUAL goal differential (Coding Rule #2, the subjective
+   "more embarrassing loss"). Lower number = eliminated first. Empty = none. */
+const ELIM_TIEBREAK = { /* e.g.  GER: 1, NED: 2  */ };
 
 /* ---------- upcoming matches (p = league team % to advance) ---------- */
 const MATCHES = [
@@ -254,11 +274,14 @@ function buildSVG(){
   }
 
   const champ=RESULTS.champ[0];
-  let center=`<text x="${CX}" y="${CY+2}" font-size="58" text-anchor="middle" dominant-baseline="central">🏆</text>`;
+  // Actual World Cup trophy graphic (trophy.svg, CC BY-SA — credited in footer)
+  const TW=110.59019, TH=294.96652;
+  const trophyImg=(h,cy)=>{const w=h*TW/TH;return `<image href="trophy.svg" x="${(CX-w/2).toFixed(1)}" y="${(cy-h/2).toFixed(1)}" width="${w.toFixed(1)}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;};
+  let center=trophyImg(104,CY);
   if(champ){
-    center=`<text x="${CX}" y="${CY-14}" font-size="46" text-anchor="middle" dominant-baseline="central">🏆</text>`
-      + svgChip(CX,CY+26,22,champ,1)
-      + (PERSON[champ]?`<text x="${CX}" y="${CY+58}" font-family="Barlow Condensed" font-size="15" font-weight="700" letter-spacing="0.08em" text-anchor="middle" fill="#f4d488">${PERSON[champ].toUpperCase()}</text>`:'');
+    center=trophyImg(66,CY-28)
+      + svgChip(CX,CY+30,22,champ,1)
+      + (PERSON[champ]?`<text x="${CX}" y="${CY+62}" font-family="Barlow Condensed" font-size="15" font-weight="700" letter-spacing="0.08em" text-anchor="middle" fill="#f4d488">${PERSON[champ].toUpperCase()}</text>`:'');
   }
 
   return `<svg viewBox="0 0 980 980" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="2026 World Cup radial bracket">
@@ -270,6 +293,14 @@ function buildSVG(){
    ============================================================ */
 const ROUND_SHORT=['R32','R16','QF','SF','Final','🏆'];
 function winCount(code){let n=0;for(let L=1;L<=5;L++)if(levelCodes[L].includes(code))n++;return n;}
+/* Elimination order per Coding Rules: eliminated-earliest first, then within
+   the same round worst GD first, then the manual embarrassment tiebreak.
+   Rule #2's "embarrassing" judgment comes from ELIM_TIEBREAK, not computation. */
+function computeElimOrder(){
+  const gd=c=>GD[c]??0, tb=c=>ELIM_TIEBREAK[c]??0;
+  return Object.keys(PERSON).filter(isEliminated)
+    .sort((a,b)=> winCount(a)-winCount(b) || gd(a)-gd(b) || tb(a)-tb(b));
+}
 function draftRows(){
   const assigned=Object.keys(PERSON);
   const out=RESULTS.elimOrder.filter(c=>assigned.includes(c));
@@ -321,6 +352,7 @@ function buildSchedule(){
   return html;
 }
 
+RESULTS.elimOrder = computeElimOrder();   // apply Coding Rules before drawing
 document.getElementById('draft').innerHTML = buildDraft();
 document.getElementById('bracket').innerHTML = buildSVG();
 document.getElementById('schedule').innerHTML = buildSchedule();
