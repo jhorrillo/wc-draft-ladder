@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>World Cup Draft Ladder — 2026 Radial Bracket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0a0c; --ink2:#121216; --line:#2a2a30; --chalk:#eef0f2; --muted:#8b8f98; --muted2:#5c606a;
+  --gold:#e8b64c; --gold-soft:#f4d488; --gold-d:#7a5c1f;
+  --win:#f2f4f6; --pending:#4a4d55;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:radial-gradient(1100px 700px at 50% 44%, #1a150a 0%, #0d0b09 42%, var(--ink) 78%);
+  color:var(--chalk);
+  font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.45;
+}
+.wrap{max-width:1360px;margin:0 auto;padding:26px 22px 44px}
+
+.eyebrow{font-family:"Barlow Condensed",sans-serif;font-weight:600;text-transform:uppercase;
+  letter-spacing:.22em;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:center}
+.eyebrow .gold{color:var(--gold-soft)}
+h1{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;
+  line-height:.94;font-size:clamp(32px,5vw,58px);margin:6px 0 8px}
+h1 .em{color:var(--gold)}
+.rule{color:var(--muted);max-width:64ch;font-size:15px;margin:0}
+.rule b{color:var(--chalk);font-weight:600}
+
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 316px;gap:26px;align-items:start;margin-top:24px}
+.bracket-wrap{position:relative}
+svg{width:100%;height:auto;display:block}
+
+.panel{background:linear-gradient(180deg,#141318,#0e0d10);border:1px solid var(--line);border-radius:16px;
+  box-shadow:0 14px 40px rgba(0,0,0,.5);overflow:hidden}
+.panel-head{padding:15px 18px 12px;border-bottom:1px solid var(--line)}
+.panel-title{font-family:"Barlow Condensed",sans-serif;font-weight:600;text-transform:uppercase;
+  letter-spacing:.14em;font-size:14px}
+.panel-sub{color:var(--muted2);font-size:11.5px;margin-top:2px}
+.panel-sub b{color:var(--gold-soft);font-weight:600}
+
+.ledger{display:flex;flex-direction:column}
+.lrow{display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid rgba(255,255,255,.04)}
+.lrow:first-child{border-top:0}
+.pick{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:28px;line-height:1;
+  color:var(--muted2);width:38px;text-align:right;font-variant-numeric:tabular-nums}
+.lflag{font-size:23px;width:26px;text-align:center;line-height:1}
+.lcontent{display:flex;flex-direction:column;min-width:0;flex:1}
+.lperson{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:19px;line-height:1.05}
+.lteam{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ltag{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.08em;
+  font-size:10.5px;color:var(--muted2);white-space:nowrap}
+.lrow.pending{opacity:.5}
+.lrow.pending .lcontent{flex-direction:row;align-items:baseline;gap:10px}
+.ldash{font-size:19px;color:var(--muted2)}
+.lnote{font-size:11.5px;color:var(--muted2);font-style:italic}
+.lrow.top-pick{background:linear-gradient(90deg,rgba(232,182,76,.16),transparent 72%)}
+.lrow.top-pick .pick{color:var(--gold)}
+.lrow.top-pick .ltag{color:var(--gold-soft)}
+
+.foot{margin-top:20px;color:var(--muted2);font-size:12.5px;display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
+.foot .k{color:var(--muted)}
+.dotdiv{width:4px;height:4px;border-radius:50%;background:var(--muted2)}
+
+@media (max-width:900px){
+  .stage{grid-template-columns:1fr}
+  .ledger-panel{order:-1}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow"><span>FIFA World Cup 2026 · Knockout Bracket</span><span class="dotdiv"></span><span class="gold">Draft order, live from the results</span></div>
+  <h1>The Draft <span class="em">Ladder</span></h1>
+  <p class="rule">Win the World Cup and you draft <b>#1</b>. The first team knocked out drafts <b>dead last at #10</b>. The bracket folds inward toward the trophy — your league name sits on the ten teams that matter.</p>
+
+  <div class="stage">
+    <div class="bracket-wrap"><div id="bracket"></div></div>
+    <div class="panel ledger-panel">
+      <div class="panel-head">
+        <div class="panel-title">Draft Order</div>
+        <div class="panel-sub"><b>Champion → #1</b> · first team out → #10</div>
+      </div>
+      <div class="ledger" id="ledger"></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span><span class="k">Results through</span> July 1, 2026</span>
+    <span class="dotdiv"></span>
+    <span><span class="k">Out so far:</span> Germany, Netherlands</span>
+    <span class="dotdiv"></span>
+    <span><span class="k">Gold ring</span> = a league team</span>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DATA — this is the only thing that changes as matches finish.
+   Update the RESULTS block (winners + elimOrder) and the whole
+   bracket + draft order re-render themselves. Nothing else to touch.
+   ============================================================ */
+const TEAM = {
+  FRA:{f:'🇫🇷',n:'France'},      SWE:{f:'🇸🇪',n:'Sweden'},
+  GER:{f:'🇩🇪',n:'Germany'},     PAR:{f:'🇵🇾',n:'Paraguay'},
+  RSA:{f:'🇿🇦',n:'South Africa'},CAN:{f:'🇨🇦',n:'Canada'},
+  NED:{f:'🇳🇱',n:'Netherlands'}, MAR:{f:'🇲🇦',n:'Morocco'},
+  POR:{f:'🇵🇹',n:'Portugal'},    CRO:{f:'🇭🇷',n:'Croatia'},
+  ESP:{f:'🇪🇸',n:'Spain'},       AUT:{f:'🇦🇹',n:'Austria'},
+  USA:{f:'🇺🇸',n:'USA'},         BIH:{f:'🇧🇦',n:'Bosnia & Herz.'},
+  BEL:{f:'🇧🇪',n:'Belgium'},     SEN:{f:'🇸🇳',n:'Senegal'},
+  BRA:{f:'🇧🇷',n:'Brazil'},      JPN:{f:'🇯🇵',n:'Japan'},
+  CIV:{f:'🇨🇮',n:'Côte d’Ivoire'},NOR:{f:'🇳🇴',n:'Norway'},
+  MEX:{f:'🇲🇽',n:'Mexico'},      ECU:{f:'🇪🇨',n:'Ecuador'},
+  ENG:{f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',n:'England'},   COD:{f:'🇨🇩',n:'DR Congo'},
+  SUI:{f:'🇨🇭',n:'Switzerland'}, ALG:{f:'🇩🇿',n:'Algeria'},
+  ARG:{f:'🇦🇷',n:'Argentina'},   CPV:{f:'🇨🇻',n:'Cape Verde'},
+  AUS:{f:'🇦🇺',n:'Australia'},   EGY:{f:'🇪🇬',n:'Egypt'},
+  COL:{f:'🇨🇴',n:'Colombia'},    GHA:{f:'🇬🇭',n:'Ghana'},
+};
+
+// League name on each assigned team
+const PERSON = {FRA:'Adam',ESP:'Cory',ARG:'Alex',ENG:'Chris',POR:'Daniel',
+                BRA:'Jordan',NED:'David',MAR:'Jason',BEL:'Gordy',GER:'Scott'};
+
+// Round-of-32 order, top→bottom of the real bracket (adjacent pairs = matches)
+const ORDER = [
+  'FRA','SWE','GER','PAR','RSA','CAN','NED','MAR',
+  'POR','CRO','ESP','AUT','USA','BIH','BEL','SEN',
+  'BRA','JPN','CIV','NOR','MEX','ECU','ENG','COD',
+  'SUI','ALG','ARG','CPV','AUS','EGY','COL','GHA'
+];
+
+// Winners as they're decided (null = not played yet).
+const RESULTS = {
+  r32:['FRA','PAR','CAN','MAR', null,null,null,null,
+       'BRA','NOR','MEX','ENG', null,null,null,null],   // 16 winners → the R16 field
+  r16:[null,null,null,null,null,null,null,null],        // 8 winners → QF
+  qf :[null,null,null,null],                            // 4 → SF
+  sf :[null,null],                                       // 2 → Final
+  champ:[null],                                          // 1 → 🏆
+  // Order league teams were knocked out (earliest first). Drives the draft tail.
+  elimOrder:['GER','NED']
+};
+
+/* ============================================================
+   GEOMETRY
+   ============================================================ */
+const CX=490, CY=490;
+const R  = [380,300,222,145,74,0];     // radius per level (R32→Champion)
+const NR = [28,22,18,14,12,0];         // node radius per level
+const WIN = [RESULTS.r32, RESULTS.r16, RESULTS.qf, RESULTS.sf, RESULTS.champ]; // WIN[L] fills level L+1
+
+const levelCodes=[ORDER.slice()];
+for(let L=1;L<=5;L++) levelCodes[L]=WIN[L-1].slice();
+
+const levelAngles=[ORDER.map((_,i)=> -90 + i*11.25)];
+for(let L=1;L<=4;L++){
+  const prev=levelAngles[L-1], arr=[];
+  for(let k=0;k<prev.length/2;k++) arr.push((prev[2*k]+prev[2*k+1])/2);
+  levelAngles[L]=arr;
+}
+function pos(radius,deg){const a=deg*Math.PI/180;return{x:CX+radius*Math.cos(a),y:CY+radius*Math.sin(a)};}
+function P(L,idx){ if(L===5) return {x:CX,y:CY}; return pos(R[L],levelAngles[L][idx]); }
+function polar(radius,deg){const p=pos(radius,deg);return[p.x,p.y];}
+
+// Did node (L,k) win its match and advance?
+function advanced(L,k){ const w=WIN[L][k>>1], code=levelCodes[L][k]; return code && w===code; }
+function decided(L,k){ return WIN[L][k>>1]!=null; }
+function nodeOpacity(L,k){ if(!decided(L,k)) return 1; return advanced(L,k)?1:0.36; }
+
+/* ============================================================
+   BUILD SVG
+   ============================================================ */
+function esc(s){return s;}
+function chip(x,y,r,code,opacity){
+  const t=TEAM[code]; const ring = PERSON[code] ? 'var(--gold)' : 'rgba(255,255,255,.16)';
+  const rw = PERSON[code] ? 2 : 1;
+  return `<g opacity="${opacity}">
+    <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="#14141a" stroke="${ring}" stroke-width="${rw}"/>
+    <text x="${x.toFixed(1)}" y="${(y+0.5).toFixed(1)}" font-size="${(r*1.42).toFixed(1)}" text-anchor="middle" dominant-baseline="central">${t.f}</text>
+  </g>`;
+}
+
+function buildSVG(){
+  let defs = `<defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffd77a" stop-opacity="0.55"/>
+      <stop offset="30%" stop-color="#e8a83c" stop-opacity="0.28"/>
+      <stop offset="60%" stop-color="#8a5a12" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>`;
+
+  // center glow
+  let glow = `<circle cx="${CX}" cy="${CY}" r="200" fill="url(#glow)"/>`;
+
+  // connectors: radial spokes + concentric arcs → right-angle joins (like the reference)
+  const litS='#f4f4f6', dimS='#2b2b31', neuS='#3a3a42';
+  function seg(d, kind){
+    const s = kind==='lit'?litS : kind==='dim'?dimS : neuS;
+    const w = kind==='lit'?2.4 : kind==='dim'?1.2 : 1.4;
+    const o = kind==='lit'?1 : kind==='dim'?.7 : .85;
+    return `<path d="${d}" fill="none" stroke="${s}" stroke-width="${w}" opacity="${o}" stroke-linecap="round"/>`;
+  }
+  function radialSeg(r1,d1,r2,d2){const [x1,y1]=polar(r1,d1),[x2,y2]=polar(r2,d2);return `M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)}`;}
+  function arcSeg(rad,fromDeg,toDeg){const [x1,y1]=polar(rad,fromDeg),[x2,y2]=polar(rad,toDeg);const sweep=toDeg>fromDeg?1:0;const large=Math.abs(toDeg-fromDeg)>180?1:0;return `M${x1.toFixed(1)},${y1.toFixed(1)} A${rad},${rad} 0 ${large} ${sweep} ${x2.toFixed(1)},${y2.toFixed(1)}`;}
+
+  let conns='';
+  for(let L=0;L<=4;L++){
+    const nParents = levelCodes[L].length/2;
+    for(let m=0;m<nParents;m++){
+      const c1=2*m, c2=2*m+1;
+      const a1=levelAngles[L][c1], a2=levelAngles[L][c2];
+      const dec = WIN[L][m]!=null;
+      const k1 = !dec?'neu':(advanced(L,c1)?'lit':'dim');
+      const k2 = !dec?'neu':(advanced(L,c2)?'lit':'dim');
+      if(L===4){ // finalists run straight to the trophy
+        const [x1,y1]=polar(R[L],a1),[x2,y2]=polar(R[L],a2);
+        conns+=seg(`M${x1.toFixed(1)},${y1.toFixed(1)} L${CX},${CY}`,k1);
+        conns+=seg(`M${x2.toFixed(1)},${y2.toFixed(1)} L${CX},${CY}`,k2);
+        continue;
+      }
+      const ap=levelAngles[L+1][m], rp=R[L+1];
+      conns+=seg(radialSeg(R[L],a1,rp,a1),k1);   // spoke in from child 1
+      conns+=seg(radialSeg(R[L],a2,rp,a2),k2);   // spoke in from child 2
+      conns+=seg(arcSeg(rp,a1,ap),k1);           // arc half to the parent node
+      conns+=seg(arcSeg(rp,ap,a2),k2);
+    }
+  }
+
+  // junction dots for empty inner nodes
+  let dots='';
+  for(let L=1;L<=4;L++){
+    for(let k=0;k<levelCodes[L].length;k++){
+      if(levelCodes[L][k]==null){ const q=P(L,k); dots+=`<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="4" fill="#3a3a42"/>`; }
+    }
+  }
+
+  // filled nodes (levels 0..4)
+  let chips='';
+  for(let L=0;L<=4;L++){
+    for(let k=0;k<levelCodes[L].length;k++){
+      const code=levelCodes[L][k]; if(code==null) continue;
+      const q=P(L,k); chips += chip(q.x,q.y,NR[L],code,nodeOpacity(L,k));
+    }
+  }
+
+  // league name labels around the outer ring
+  let names='';
+  for(let i=0;i<ORDER.length;i++){
+    const code=ORDER[i]; if(!PERSON[code]) continue;
+    const lp=pos(R[0]+30, levelAngles[0][i]);
+    const dim = decided(0,i) && !advanced(0,i) ? 0.5 : 1;
+    names += `<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" font-family="Barlow Condensed" font-size="14" font-weight="600"
+      letter-spacing="0.06em" text-anchor="middle" dominant-baseline="central" fill="#f4d488" opacity="${dim}">${PERSON[code].toUpperCase()}</text>`;
+  }
+
+  // center trophy (+ champion if decided)
+  const champ = RESULTS.champ[0];
+  let center = `<text x="${CX}" y="${CY+2}" font-size="58" text-anchor="middle" dominant-baseline="central">🏆</text>`;
+  if(champ){
+    center = `<text x="${CX}" y="${CY-14}" font-size="46" text-anchor="middle" dominant-baseline="central">🏆</text>`
+      + chip(CX, CY+26, 22, champ, 1)
+      + (PERSON[champ]?`<text x="${CX}" y="${CY+58}" font-family="Barlow Condensed" font-size="15" font-weight="700" letter-spacing="0.08em" text-anchor="middle" fill="#f4d488">${PERSON[champ].toUpperCase()}</text>`:'');
+  }
+
+  return `<svg viewBox="0 0 980 980" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="2026 World Cup radial bracket">
+    ${defs}${glow}
+    <g>${conns}</g>
+    <g>${dots}</g>
+    <g>${chips}</g>
+    <g>${names}</g>
+    ${center}
+  </svg>`;
+}
+
+/* ============================================================
+   DRAFT ORDER (champion drafts first)
+   ============================================================ */
+const ROUND_SHORT=['R32','R16','QF','SF','Final','🏆'];
+function winCount(code){ let n=0; for(let L=1;L<=5;L++){ if(levelCodes[L].includes(code)) n++; } return n; }
+
+function draftRows(){
+  const assigned=Object.keys(PERSON);
+  const out=RESULTS.elimOrder.filter(c=>assigned.includes(c));         // earliest first
+  const champ=(RESULTS.champ[0]&&assigned.includes(RESULTS.champ[0]))?RESULTS.champ[0]:null;
+  const alive=assigned.filter(c=>!out.includes(c)&&c!==champ);
+  const bottom = champ ? champ : (alive.length===1?alive[0]:null);
+  const pending = 10 - out.length - (bottom?1:0);
+  const worstToBest=[];
+  out.forEach(c=>worstToBest.push({code:c,kind:'out'}));
+  for(let i=0;i<pending;i++) worstToBest.push({kind:'pending'});
+  if(bottom) worstToBest.push({code:bottom,kind:champ?'champion':'survivor'});
+  // champion drafts first → reverse so best is pick #1
+  return worstToBest.slice().reverse().map((s,i)=>({pick:i+1,...s}));
+}
+
+function buildLedger(){
+  return draftRows().map(row=>{
+    const n=String(row.pick).padStart(2,'0');
+    if(row.kind==='pending'){
+      return `<div class="lrow pending"><span class="pick">${n}</span>
+        <span class="lcontent"><span class="ldash">—</span><span class="lnote">Still in play</span></span></div>`;
+    }
+    const t=TEAM[row.code];
+    let tag;
+    if(row.kind==='champion') tag='🏆 Champion';
+    else if(row.kind==='survivor') tag='Still standing';
+    else { const w=winCount(row.code); tag = w===4?'Runner-up':'Out · '+ROUND_SHORT[w]; }
+    const cls = row.pick===1?'top-pick':'';
+    return `<div class="lrow ${cls}"><span class="pick">${n}</span>
+      <span class="lflag">${t.f}</span>
+      <span class="lcontent"><span class="lperson">${PERSON[row.code]}</span><span class="lteam">${t.n}</span></span>
+      <span class="ltag">${tag}</span></div>`;
+  }).join('');
+}
+
+document.getElementById('bracket').innerHTML = buildSVG();
+document.getElementById('ledger').innerHTML = buildLedger();
+</script>
+</body>
+</html>
