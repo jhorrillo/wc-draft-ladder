@@ -84,10 +84,13 @@ svg{width:100%;height:auto;display:block}
 footer{margin-top:30px;text-align:center;color:var(--muted2);font-size:12px}
 
 @media (max-width:560px){
-  .mrow{grid-template-columns:1fr;gap:14px}
-  .side.opp{justify-content:flex-start;flex-direction:row}
-  .s-txt.right{align-items:flex-start;text-align:left}
-  .oddswrap{order:3}
+  /* two teams side by side on one line; odds bar full-width below */
+  .mrow{grid-template-columns:1fr 1fr;column-gap:10px;row-gap:12px;align-items:center}
+  .side.league{grid-column:1;grid-row:1}
+  .side.opp{grid-column:2;grid-row:1}
+  .oddswrap{grid-column:1 / -1;grid-row:2}
+  /* full-bleed radial bracket — cancel the .wrap side padding */
+  .bracket-wrap{max-width:none;margin:0 -20px}
 }
 </style>
 </head>
