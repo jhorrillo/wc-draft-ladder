@@ -25,6 +25,10 @@ body{
 
 .eyebrow{font-family:"Barlow Condensed",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.22em;font-size:12px;color:var(--muted)}
 h1{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;font-size:clamp(30px,5vw,50px);margin:4px 0 0;line-height:.95}
+.rules{margin:14px 0 0;padding:11px 15px;max-width:640px;background:var(--ink2);border:1px solid var(--line);border-left:3px solid var(--gold-d);border-radius:9px;font-size:13px;color:var(--muted);line-height:1.5}
+.rules .rh{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--gold-soft)}
+.rules ol{margin:6px 0 0;padding-left:18px}
+.rules li{margin:3px 0}
 
 section{margin-top:34px}
 .sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
@@ -91,6 +95,13 @@ footer{margin-top:30px;text-align:center;color:var(--muted2);font-size:12px}
 <div class="wrap">
   <div class="eyebrow">2026 FIFA World Cup · Knockouts</div>
   <h1>League Draft Board</h1>
+  <div class="rules">
+    <span class="rh">Elimination Rules</span>
+    <ol>
+      <li>When teams are knocked out in the same round, goal differential decides — the worse GD is eliminated first.</li>
+      <li>When goal differential is equal, the team that lost in the more embarrassing fashion is eliminated first.</li>
+    </ol>
+  </div>
 
   <section>
     <div class="sec-h"><span class="t">Draft Order</span><span class="n">Champion 1st → first out 10th</span></div>
@@ -107,7 +118,7 @@ footer{margin-top:30px;text-align:center;color:var(--muted2);font-size:12px}
     <div id="schedule"></div>
   </section>
 
-  <footer>Snapshot: July 1, 2026 · all times PT<br><span style="opacity:.55;font-size:11px">Trophy: “Coppa del mondo” by Gambo7 · Wikimedia Commons · CC BY-SA 4.0</span></footer>
+  <footer>Snapshot: July 1, 2026 · all times PT<br><span style="font-size:8px;color:#100e0b">Trophy: “Coppa del mondo” by Gambo7 · Wikimedia Commons · CC BY-SA 4.0</span></footer>
 </div>
 
 <script>
