@@ -1,7 +1,7 @@
 {
-  "snapshot": "July 1, 2026",
+  "snapshot": "July 2, 2026",
   "results": {
-    "r32": ["FRA","PAR","CAN","MAR", null,null,"USA","BEL",
+    "r32": ["FRA","PAR","CAN","MAR", null,"ESP","USA","BEL",
             "BRA","NOR","MEX","ENG", null,null,null,null],
     "r16": [null,null,null,null,null,null,null,null],
     "qf":  [null,null,null,null],
@@ -10,8 +10,7 @@
     "elimOrder": ["GER","NED"]
   },
   "matches": [
-    {"round":"R32","day":"Thursday · July 2","time":"12:00 PM PT","venue":"SoFi Stadium · Los Angeles","tv":"FOX","L":"ESP","person":"Cory","O":"AUT","p":87},
-    {"round":"R32","day":"Thursday · July 2","time":"4:00 PM PT","venue":"BMO Field · Toronto","tv":"FOX","L":"POR","person":"Daniel","O":"CRO","p":70},
+    {"round":"R32","day":"Thursday · July 2","time":"4:00 PM PT","venue":"BMO Field · Toronto","tv":"FOX","live":true,"L":"POR","person":"Daniel","O":"CRO","p":70},
     {"round":"R32","day":"Friday · July 3","time":"3:00 PM PT","venue":"Hard Rock Stadium · Miami","tv":"FOX","L":"ARG","person":"Alex","O":"CPV","p":93},
     {"round":"R16","day":"Saturday · July 4","time":"10:00 AM PT","venue":"NRG Stadium · Houston","tv":"FOX","L":"MAR","person":"Jason","O":"CAN","p":76},
     {"round":"R16","day":"Saturday · July 4","time":"2:00 PM PT","venue":"Lincoln Financial Field · Philadelphia","tv":"FOX","L":"FRA","person":"Adam","O":"PAR","p":84},
