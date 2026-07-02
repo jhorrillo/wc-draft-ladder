@@ -11,34 +11,55 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0a0a0c; --ink2:#141318; --ink3:#1b1a20; --line:#2a2a30; --chalk:#eef0f2;
+  --ink:#09090b; --ink2:#141318; --ink3:#1b1a20; --line:#2a2a30; --chalk:#eef0f2;
   --muted:#8b8f98; --muted2:#5c606a; --gold:#e8b64c; --gold-soft:#f4d488; --gold-d:#7a5c1f;
+  --red:#ff3b30;
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 html,body{margin:0}
 body{
-  background:radial-gradient(1100px 720px at 50% 34%, #171207 0%, #0d0b09 50%, var(--ink) 86%);
+  background:var(--ink);
   color:var(--chalk);font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  -webkit-font-smoothing:antialiased;line-height:1.45;
+  -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
 }
-.wrap{max-width:860px;margin:0 auto;padding:28px 20px 40px}
 
-.eyebrow{font-family:"Barlow Condensed",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.22em;font-size:12px;color:var(--muted)}
-h1{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;font-size:clamp(30px,5vw,50px);margin:4px 0 0;line-height:.95}
-.rules{margin:14px 0 0;padding:11px 15px;max-width:640px;background:var(--ink2);border:1px solid var(--line);border-left:3px solid var(--gold-d);border-radius:9px;font-size:13px;color:var(--muted);line-height:1.5}
-.rules .rh{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--gold-soft)}
-.rules ol{margin:6px 0 0;padding-left:18px}
-.rules li{margin:3px 0}
+/* ---------- atmosphere ---------- */
+.atmo{position:fixed;inset:0;pointer-events:none;z-index:0}
+.atmo .halo{position:absolute;left:50%;top:38%;width:min(140vw,1500px);aspect-ratio:1;transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(232,168,60,.14) 0%, rgba(138,90,18,.06) 34%, transparent 62%);
+  animation:breathe 9s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.75;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}}
+.atmo .grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.atmo .vig{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 30%, transparent 55%, rgba(0,0,0,.55) 100%)}
+.mote{position:absolute;border-radius:50%;background:var(--gold-soft);opacity:0;
+  animation:mote var(--dur) linear infinite;animation-delay:var(--delay)}
+@keyframes mote{0%{opacity:0;transform:translateY(16px)}12%{opacity:var(--peak)}80%{opacity:var(--peak)}100%{opacity:0;transform:translateY(-52px)}}
+@media (prefers-reduced-motion:reduce){.atmo .halo,.mote{animation:none}.mote{opacity:0}}
 
-section{margin-top:34px}
-.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.sec-h .t{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.09em;font-size:20px;color:var(--chalk)}
-.sec-h .n{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--muted2)}
+.wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:30px 20px 44px}
 
-/* Draft order — condensed grid */
-.draft{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
-.dchip{display:flex;align-items:center;gap:9px;background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
-.dchip.top{border-color:var(--gold-d);background:linear-gradient(90deg,rgba(232,182,76,.12),var(--ink2) 72%)}
+.eyebrow{font-family:"Barlow Condensed",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.24em;font-size:12px;color:var(--muted)}
+h1{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;font-size:clamp(32px,5.4vw,54px);margin:4px 0 0;line-height:.94;
+  background:linear-gradient(180deg,#fff 30%,#cbb27a 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+section{margin-top:40px}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 16px;padding-bottom:9px;
+  border-bottom:1px solid transparent;border-image:linear-gradient(90deg,var(--gold-d),var(--line) 55%,transparent) 1}
+.sec-h .t{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.09em;font-size:21px}
+.sec-h .n{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--muted2);text-align:right}
+
+/* ---------- draft order ---------- */
+.draft{display:grid;grid-template-columns:repeat(auto-fill,minmax(152px,1fr));gap:8px}
+.dchip{display:flex;align-items:center;gap:9px;background:linear-gradient(180deg,var(--ink2),#101014);
+  border:1px solid var(--line);border-radius:10px;padding:8px 10px;transition:transform .18s ease,border-color .18s ease}
+.dchip:hover{transform:translateY(-2px);border-color:#3c3c44}
+.dchip.top{border-color:var(--gold-d);background:linear-gradient(90deg,rgba(232,182,76,.14),var(--ink2) 72%);
+  box-shadow:0 0 22px rgba(232,182,76,.08)}
 .dpick{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:24px;color:var(--muted2);width:24px;text-align:center;font-variant-numeric:tabular-nums;line-height:1}
 .dchip.top .dpick{color:var(--gold)}
 .dflag{font-size:21px;line-height:1}
@@ -46,17 +67,26 @@ section{margin-top:34px}
 .dperson{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:16px;line-height:1.06}
 .dtag{font-family:"Barlow Condensed",sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted2);white-space:nowrap}
 .dchip.top .dtag{color:var(--gold-soft)}
-.dchip.pending{opacity:.45}
+.dchip.pending{opacity:.42}
 .dpend{font-size:11px;font-style:italic;color:var(--muted2)}
 
-/* Bracket */
-.bracket-wrap{max-width:640px;margin:0 auto}
-svg{width:100%;height:auto;display:block}
+/* ---------- bracket ---------- */
+.bracket-wrap{position:relative;max-width:660px;margin:0 auto}
+.bracket-wrap .ring{position:absolute;inset:6%;border-radius:50%;pointer-events:none;
+  background:conic-gradient(from 0deg, transparent 0deg, rgba(232,182,76,.05) 40deg, transparent 90deg, transparent 200deg, rgba(232,182,76,.04) 250deg, transparent 300deg);
+  animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.bracket-wrap .ring{animation:none}}
+svg{width:100%;height:auto;display:block;position:relative}
+svg path.lit{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.4s ease forwards .3s}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){svg path.lit{animation:none;stroke-dashoffset:0}}
 
-/* Upcoming matches */
+/* ---------- upcoming matches ---------- */
 .day{font-family:"Barlow Condensed",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:13px;color:var(--muted);margin:18px 0 10px}
 .day:first-child{margin-top:0}
-.match{background:linear-gradient(180deg,var(--ink2),#0e0d11);border:1px solid var(--line);border-radius:14px;padding:13px 16px 15px;margin-bottom:12px}
+.match{background:linear-gradient(180deg,var(--ink2),#0e0d11);border:1px solid var(--line);border-radius:14px;padding:13px 16px 15px;margin-bottom:12px;transition:border-color .18s ease}
+.match:hover{border-color:var(--gold-d)}
 .mtop{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;color:var(--muted2);margin-bottom:12px}
 .round{font-family:"Barlow Condensed",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--line);color:var(--muted)}
 .round.r16{color:var(--gold-soft);border-color:var(--gold-d)}
@@ -81,63 +111,77 @@ svg{width:100%;height:auto;display:block}
 .fill-l{background:linear-gradient(90deg,var(--gold),var(--gold-soft))}
 .fill-r{background:#3a3a42}
 
-footer{margin-top:30px;text-align:center;color:var(--muted2);font-size:12px}
+/* ---------- potential outcomes ---------- */
+.outs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.ocard{background:linear-gradient(180deg,var(--ink2),#0e0d11);border:1px solid var(--line);border-radius:14px;padding:14px 15px;transition:border-color .18s ease,transform .18s ease}
+.ocard:hover{border-color:var(--gold-d);transform:translateY(-2px)}
+.ohead{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.oflag{font-size:28px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+.oname{display:flex;flex-direction:column;min-width:0}
+.operson{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:20px;line-height:1}
+.oteam{font-size:11.5px;color:var(--muted)}
+.ostage{margin-left:auto;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--gold-soft);border:1px solid var(--gold-d);border-radius:6px;padding:3px 8px;white-space:nowrap}
+.orow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;border-top:1px solid rgba(255,255,255,.05);font-size:12.5px}
+.ok{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:10.5px;color:var(--muted2);white-space:nowrap}
+.ov{color:var(--chalk);text-align:right;min-width:0}
+.ov .sub{color:var(--muted2)}
+.ov.gold{color:var(--gold-soft)}
+.picks{display:flex;gap:3px;margin-top:11px}
+.pk{flex:1;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;
+  font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:12px;color:var(--muted2);background:#1e1e24;border:1px solid #26262c}
+.pk.open{background:linear-gradient(180deg,rgba(232,182,76,.22),rgba(232,182,76,.08));border-color:var(--gold-d);color:var(--gold-soft)}
+.pk.gone{color:#4a3532;background:#171417;position:relative}
+.pk.gone::after{content:'✕';position:absolute;color:var(--red);font-size:10px;opacity:.8}
+.plegend{margin-top:7px;font-size:10.5px;color:var(--muted2);font-family:"Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase}
+
+footer{margin-top:34px;text-align:center;color:var(--muted2);font-size:12px}
+footer .u{color:var(--muted)}
 
 @media (max-width:560px){
-  /* two teams side by side on one line; odds bar full-width below */
-  .mrow{grid-template-columns:1fr 1fr;column-gap:10px;row-gap:12px;align-items:center}
-  .side.league{grid-column:1;grid-row:1}
-  .side.opp{grid-column:2;grid-row:1}
-  .oddswrap{grid-column:1 / -1;grid-row:2}
-  /* full-bleed radial bracket — cancel the .wrap side padding */
-  .bracket-wrap{max-width:none;margin:0 -20px}
+  .mrow{grid-template-columns:1fr;gap:14px}
+  .side.opp{justify-content:flex-start;flex-direction:row-reverse}
+  .s-txt.right{align-items:flex-start;text-align:left}
+  .oddswrap{order:3}
 }
 </style>
 </head>
 <body>
+<div class="atmo">
+  <div class="halo"></div>
+  <div class="grain"></div>
+  <div class="vig"></div>
+</div>
+
 <div class="wrap">
   <div class="eyebrow">2026 FIFA World Cup · Knockouts</div>
   <h1>League Draft Board</h1>
-  <div class="rules">
-    <span class="rh">Elimination Rules</span>
-    <ol>
-      <li>When teams are knocked out in the same round, goal differential decides — the worse GD is eliminated first.</li>
-      <li>When goal differential is equal, the team that lost in the more embarrassing fashion is eliminated first.</li>
-    </ol>
-  </div>
 
-  <section>
+  <section class="reveal">
     <div class="sec-h"><span class="t">Draft Order</span><span class="n">Champion 1st → first out 10th</span></div>
     <div class="draft" id="draft"></div>
   </section>
 
-  <section>
-    <div class="sec-h"><span class="t">Bracket</span><span class="n">COOL DUDE TEAMS IN GOLD</span></div>
-    <div class="bracket-wrap"><div id="bracket"></div></div>
+  <section class="reveal">
+    <div class="sec-h"><span class="t">Bracket</span><span class="n">Your teams in gold</span></div>
+    <div class="bracket-wrap"><div class="ring"></div><div id="bracket"></div></div>
   </section>
 
-  <section>
+  <section class="reveal">
     <div class="sec-h"><span class="t">Upcoming Matches</span><span class="n">% to advance</span></div>
     <div id="schedule"></div>
   </section>
 
-  <footer>Snapshot: July 1, 2026 · all times PT<br><span style="font-size:8px;color:#100e0b">Trophy: “Coppa del mondo” by Gambo7 · Wikimedia Commons · CC BY-SA 4.0</span></footer>
+  <section class="reveal">
+    <div class="sec-h"><span class="t">Potential Outcomes</span><span class="n">Who's still alive, and what they can still draft</span></div>
+    <div class="outs" id="outcomes"></div>
+  </section>
+
+  <footer><span id="snapshot"></span> · all times PT<br><span style="font-size:8px;color:#100e0b">Trophy: “Coppa del mondo” by Gambo7 · Wikimedia Commons · CC BY-SA 4.0</span></footer>
 </div>
 
 <script>
-/* ============================================================
-   LEAGUE CODING RULES (elimination order)
-   1. When two teams are knocked out in the SAME round, goal
-      differential (GD) decides elimination order — the team with
-      the worse (lower) GD is eliminated first (i.e. lands the worst
-      draft pick).
-   2. When GD is equal, the team that lost in the more embarrassing
-      fashion is eliminated first.
-      NOTE: "embarrassing" is subjective and is NOT computed here —
-      resolve equal-GD ties by hand via the ELIM_TIEBREAK map below.
-   ============================================================ */
-
-/* ---------- teams + league ---------- */
+/* ---------- static reference data ---------- */
 const TEAM = {
   FRA:{f:'🇫🇷',n:'France'},      SWE:{f:'🇸🇪',n:'Sweden'},
   GER:{f:'🇩🇪',n:'Germany'},     PAR:{f:'🇵🇾',n:'Paraguay'},
@@ -158,106 +202,105 @@ const TEAM = {
 };
 const PERSON = {FRA:'Adam',ESP:'Cory',ARG:'Alex',ENG:'Chris',POR:'Daniel',
                 BRA:'Jordan',NED:'David',MAR:'Jason',BEL:'Gordy',GER:'Scott'};
-
-/* ---------- bracket data ---------- */
 const ORDER = [
   'FRA','SWE','GER','PAR','RSA','CAN','NED','MAR',
   'POR','CRO','ESP','AUT','USA','BIH','BEL','SEN',
   'BRA','JPN','CIV','NOR','MEX','ECU','ENG','COD',
   'SUI','ALG','ARG','CPV','AUS','EGY','COL','GHA'
 ];
-const RESULTS = {
-  r32:['FRA','PAR','CAN','MAR', null,null,null,'BEL',
-       'BRA','NOR','MEX','ENG', null,null,null,null],
-  r16:[null,null,null,null,null,null,null,null],
-  qf :[null,null,null,null],
-  sf :[null,null],
-  champ:[null],
-  elimOrder:[]   // computed at runtime from the bracket + GD (see Coding Rules)
+const ROUND_SHORT=['R32','R16','QF','SF','Final','🏆'];
+const ROUND_AT=['R32','R16','QF','SF','the Final','Champion']; // stage a team is *in* at level L
+const MEET_NAME=['','the R32','the R16','the QF','the semis','the Final'];
+
+/* ---------- fallback data (used if results.json can't be fetched) ---------- */
+const FALLBACK = {
+  snapshot:"July 1, 2026",
+  results:{
+    r32:['FRA','PAR','CAN','MAR', null,null,'USA','BEL',
+         'BRA','NOR','MEX','ENG', null,null,null,null],
+    r16:[null,null,null,null,null,null,null,null],
+    qf:[null,null,null,null], sf:[null,null], champ:[null],
+    elimOrder:['GER','NED']
+  },
+  matches:[
+    {round:'R32',day:'Thursday · July 2',time:'12:00 PM PT',venue:'SoFi Stadium · Los Angeles',tv:'FOX',L:'ESP',person:'Cory',O:'AUT',p:87},
+    {round:'R32',day:'Thursday · July 2',time:'4:00 PM PT',venue:'BMO Field · Toronto',tv:'FOX',L:'POR',person:'Daniel',O:'CRO',p:70},
+    {round:'R32',day:'Friday · July 3',time:'3:00 PM PT',venue:'Hard Rock Stadium · Miami',tv:'FOX',L:'ARG',person:'Alex',O:'CPV',p:93},
+    {round:'R16',day:'Saturday · July 4',time:'10:00 AM PT',venue:'NRG Stadium · Houston',tv:'FOX',L:'MAR',person:'Jason',O:'CAN',p:76},
+    {round:'R16',day:'Saturday · July 4',time:'2:00 PM PT',venue:'Lincoln Financial Field · Philadelphia',tv:'FOX',L:'FRA',person:'Adam',O:'PAR',p:84},
+    {round:'R16',day:'Sunday · July 5',time:'1:00 PM PT',venue:'MetLife Stadium · New Jersey',tv:'FOX',L:'BRA',person:'Jordan',O:'NOR',p:72},
+    {round:'R16',day:'Sunday · July 5',time:'5:00 PM PT',venue:'Estadio Azteca · Mexico City',tv:'FOX',L:'ENG',person:'Chris',O:'MEX',p:57},
+    {round:'R16',day:'Monday · July 6',time:'5:00 PM PT',venue:'Lumen Field · Seattle',tv:'FOX',L:'BEL',person:'Gordy',O:'USA',p:50}
+  ]
 };
 
-/* Goal differential per team — fill in real numbers as results come in.
-   Only eliminated teams matter for ordering; missing = 0. (Coding Rule #1) */
-const GD = { GER:-3, NED:-1 };
-
-/* Manual tiebreak for EQUAL goal differential (Coding Rule #2, the subjective
-   "more embarrassing loss"). Lower number = eliminated first. Empty = none. */
-const ELIM_TIEBREAK = { /* e.g.  GER: 1, NED: 2  */ };
-
-/* ---------- upcoming matches (p = league team % to advance) ---------- */
-const MATCHES = [
-  {round:'R32',day:'Thursday · July 2',time:'12:00 PM PT',venue:'SoFi Stadium · Los Angeles',tv:'FOX',L:'ESP',person:'Cory',O:'AUT',p:87},
-  {round:'R32',day:'Thursday · July 2',time:'4:00 PM PT',venue:'BMO Field · Toronto',tv:'FOX',L:'POR',person:'Daniel',O:'CRO',p:70},
-  {round:'R32',day:'Friday · July 3',time:'3:00 PM PT',venue:'Hard Rock Stadium · Miami',tv:'FOX',L:'ARG',person:'Alex',O:'CPV',p:93},
-  {round:'R16',day:'Saturday · July 4',time:'10:00 AM PT',venue:'NRG Stadium · Houston',tv:'FOX',L:'MAR',person:'Jason',O:'CAN',p:76},
-  {round:'R16',day:'Saturday · July 4',time:'2:00 PM PT',venue:'Lincoln Financial Field · Philadelphia',tv:'FOX',L:'FRA',person:'Adam',O:'PAR',p:84},
-  {round:'R16',day:'Sunday · July 5',time:'1:00 PM PT',venue:'MetLife Stadium · New Jersey',tv:'FOX',L:'BRA',person:'Jordan',O:'NOR',p:72},
-  {round:'R16',day:'Sunday · July 5',time:'5:00 PM PT',venue:'Estadio Azteca · Mexico City',tv:'FOX',L:'ENG',person:'Chris',O:'MEX',p:57},
-];
-
 /* ============================================================
-   BRACKET GEOMETRY
+   RENDER PIPELINE — everything derives from one data object
    ============================================================ */
-const CX=490, CY=490;
-const R  = [380,300,222,145,74,0];
-const NR = [28,22,18,14,12,0];
-const WIN = [RESULTS.r32, RESULTS.r16, RESULTS.qf, RESULTS.sf, RESULTS.champ];
+let D; // active data
+let levelCodes, levelAngles, WIN;
 
-const levelCodes=[ORDER.slice()];
-for(let L=1;L<=5;L++) levelCodes[L]=WIN[L-1].slice();
-const levelAngles=[ORDER.map((_,i)=> -90 + i*11.25)];
-for(let L=1;L<=4;L++){
-  const prev=levelAngles[L-1], arr=[];
-  for(let k=0;k<prev.length/2;k++) arr.push((prev[2*k]+prev[2*k+1])/2);
-  levelAngles[L]=arr;
+function buildLevels(){
+  WIN=[D.results.r32,D.results.r16,D.results.qf,D.results.sf,D.results.champ];
+  levelCodes=[ORDER.slice()];
+  for(let L=1;L<=5;L++) levelCodes[L]=WIN[L-1].slice();
+  levelAngles=[ORDER.map((_,i)=> -90 + i*11.25)];
+  for(let L=1;L<=4;L++){
+    const prev=levelAngles[L-1],arr=[];
+    for(let k=0;k<prev.length/2;k++) arr.push((prev[2*k]+prev[2*k+1])/2);
+    levelAngles[L]=arr;
+  }
 }
+
+const CX=490,CY=490, R=[380,300,222,145,74,0], NR=[28,22,18,14,12,0];
 function pos(radius,deg){const a=deg*Math.PI/180;return{x:CX+radius*Math.cos(a),y:CY+radius*Math.sin(a)};}
 function polar(radius,deg){const p=pos(radius,deg);return[p.x,p.y];}
-function advanced(L,k){ const w=WIN[L][k>>1], code=levelCodes[L][k]; return code && w===code; }
-function decided(L,k){ return WIN[L][k>>1]!=null; }
-function nodeOpacity(L,k){ if(!decided(L,k)) return 1; return advanced(L,k)?1:0.36; }
+function advanced(L,k){const w=WIN[L][k>>1],code=levelCodes[L][k];return code&&w===code;}
+function decided(L,k){return WIN[L][k>>1]!=null;}
+function nodeOpacity(L,k){if(!decided(L,k))return 1;return advanced(L,k)?1:0.36;}
 function deepestNode(code){for(let L=5;L>=0;L--){const idx=levelCodes[L].indexOf(code);if(idx>=0)return{L,k:idx};}return null;}
 function isEliminated(code){const dn=deepestNode(code);if(!dn||dn.L===5)return false;return decided(dn.L,dn.k)&&!advanced(dn.L,dn.k);}
-function redX(x,y,r){const d=r*0.7;return `<g><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(r+1).toFixed(1)}" fill="rgba(12,0,0,0.5)"/><line x1="${(x-d).toFixed(1)}" y1="${(y-d).toFixed(1)}" x2="${(x+d).toFixed(1)}" y2="${(y+d).toFixed(1)}" stroke="#ff3b30" stroke-width="3.6" stroke-linecap="round"/><line x1="${(x-d).toFixed(1)}" y1="${(y+d).toFixed(1)}" x2="${(x+d).toFixed(1)}" y2="${(y-d).toFixed(1)}" stroke="#ff3b30" stroke-width="3.6" stroke-linecap="round"/></g>`;}
+function winCount(code){let n=0;for(let L=1;L<=5;L++)if(levelCodes[L].includes(code))n++;return n;}
 
+/* ---------- bracket SVG ---------- */
 function svgChip(x,y,r,code,opacity){
-  const t=TEAM[code]; const ring = PERSON[code] ? 'var(--gold)' : 'rgba(255,255,255,.16)';
-  const rw = PERSON[code] ? 2 : 1;
-  return `<g opacity="${opacity}">
+  const t=TEAM[code];const ring=PERSON[code]?'var(--gold)':'rgba(255,255,255,.16)';const rw=PERSON[code]?2:1;
+  const tip=PERSON[code]?`${t.n} — ${PERSON[code]}`:t.n;
+  return `<g opacity="${opacity}"><title>${tip}</title>
     <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="#14141a" stroke="${ring}" stroke-width="${rw}"/>
-    <text x="${x.toFixed(1)}" y="${(y+0.5).toFixed(1)}" font-size="${(r*1.42).toFixed(1)}" text-anchor="middle" dominant-baseline="central">${t.f}</text>
-  </g>`;
+    <text x="${x.toFixed(1)}" y="${(y+0.5).toFixed(1)}" font-size="${(r*1.42).toFixed(1)}" text-anchor="middle" dominant-baseline="central">${t.f}</text></g>`;
 }
+function redX(x,y,r){const d=r*0.7;return `<g><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(r+1).toFixed(1)}" fill="rgba(12,0,0,0.5)"/><line x1="${(x-d).toFixed(1)}" y1="${(y-d).toFixed(1)}" x2="${(x+d).toFixed(1)}" y2="${(y+d).toFixed(1)}" stroke="var(--red)" stroke-width="3.6" stroke-linecap="round"/><line x1="${(x-d).toFixed(1)}" y1="${(y+d).toFixed(1)}" x2="${(x+d).toFixed(1)}" y2="${(y-d).toFixed(1)}" stroke="var(--red)" stroke-width="3.6" stroke-linecap="round"/></g>`;}
 
 function buildSVG(){
-  const defs = `<defs><radialGradient id="glow" cx="50%" cy="50%" r="50%">
-    <stop offset="0%" stop-color="#ffd77a" stop-opacity="0.55"/>
-    <stop offset="30%" stop-color="#e8a83c" stop-opacity="0.28"/>
-    <stop offset="60%" stop-color="#8a5a12" stop-opacity="0.10"/>
-    <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+  const defs=`<defs><radialGradient id="glow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#ffd77a" stop-opacity="0.55"/><stop offset="30%" stop-color="#e8a83c" stop-opacity="0.28"/>
+    <stop offset="60%" stop-color="#8a5a12" stop-opacity="0.10"/><stop offset="100%" stop-color="#000" stop-opacity="0"/>
   </radialGradient></defs>`;
-  const glow = `<circle cx="${CX}" cy="${CY}" r="200" fill="url(#glow)"/>`;
+  const glow=`<circle cx="${CX}" cy="${CY}" r="200" fill="url(#glow)"/>`;
 
-  const litS='#f4f4f6', dimS='#2b2b31', neuS='#3a3a42';
-  function seg(d,kind){const s=kind==='lit'?litS:kind==='dim'?dimS:neuS;const w=kind==='lit'?2.4:kind==='dim'?1.2:1.4;const o=kind==='lit'?1:kind==='dim'?.7:.85;return `<path d="${d}" fill="none" stroke="${s}" stroke-width="${w}" opacity="${o}" stroke-linecap="round"/>`;}
-  function radialSeg(r1,d1,r2,d2){const [x1,y1]=polar(r1,d1),[x2,y2]=polar(r2,d2);return `M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)}`;}
-  function arcSeg(rad,fromDeg,toDeg){const [x1,y1]=polar(rad,fromDeg),[x2,y2]=polar(rad,toDeg);const sweep=toDeg>fromDeg?1:0;const large=Math.abs(toDeg-fromDeg)>180?1:0;return `M${x1.toFixed(1)},${y1.toFixed(1)} A${rad},${rad} 0 ${large} ${sweep} ${x2.toFixed(1)},${y2.toFixed(1)}`;}
+  function seg(d,kind){
+    if(kind==='lit') return `<path class="lit" pathLength="1" d="${d}" fill="none" stroke="#f4f4f6" stroke-width="2.4" stroke-linecap="round"/>`;
+    const s=kind==='dim'?'#2b2b31':'#3a3a42', w=kind==='dim'?1.2:1.4, o=kind==='dim'?.7:.85;
+    return `<path d="${d}" fill="none" stroke="${s}" stroke-width="${w}" opacity="${o}" stroke-linecap="round"/>`;
+  }
+  function radialSeg(r1,d1,r2,d2){const[x1,y1]=polar(r1,d1),[x2,y2]=polar(r2,d2);return`M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)}`;}
+  function arcSeg(rad,f,t){const[x1,y1]=polar(rad,f),[x2,y2]=polar(rad,t);const sw=t>f?1:0,lg=Math.abs(t-f)>180?1:0;return`M${x1.toFixed(1)},${y1.toFixed(1)} A${rad},${rad} 0 ${lg} ${sw} ${x2.toFixed(1)},${y2.toFixed(1)}`;}
 
   let conns='';
   for(let L=0;L<=4;L++){
-    const nParents=levelCodes[L].length/2;
-    for(let m=0;m<nParents;m++){
-      const c1=2*m,c2=2*m+1, a1=levelAngles[L][c1], a2=levelAngles[L][c2];
+    const nP=levelCodes[L].length/2;
+    for(let m=0;m<nP;m++){
+      const c1=2*m,c2=2*m+1,a1=levelAngles[L][c1],a2=levelAngles[L][c2];
       const dec=WIN[L][m]!=null;
       const k1=!dec?'neu':(advanced(L,c1)?'lit':'dim');
       const k2=!dec?'neu':(advanced(L,c2)?'lit':'dim');
       if(L===4){
-        const [x1,y1]=polar(R[L],a1),[x2,y2]=polar(R[L],a2);
+        const[x1,y1]=polar(R[L],a1),[x2,y2]=polar(R[L],a2);
         conns+=seg(`M${x1.toFixed(1)},${y1.toFixed(1)} L${CX},${CY}`,k1);
-        conns+=seg(`M${x2.toFixed(1)},${y2.toFixed(1)} L${CX},${CY}`,k2);
-        continue;
+        conns+=seg(`M${x2.toFixed(1)},${y2.toFixed(1)} L${CX},${CY}`,k2);continue;
       }
-      const ap=levelAngles[L+1][m], rp=R[L+1];
+      const ap=levelAngles[L+1][m],rp=R[L+1];
       conns+=seg(radialSeg(R[L],a1,rp,a1),k1);
       conns+=seg(radialSeg(R[L],a2,rp,a2),k2);
       conns+=seg(arcSeg(rp,a1,ap),k1);
@@ -266,65 +309,53 @@ function buildSVG(){
   }
 
   let dots='';
-  for(let L=1;L<=4;L++) for(let k=0;k<levelCodes[L].length;k++)
+  for(let L=1;L<=4;L++)for(let k=0;k<levelCodes[L].length;k++)
     if(levelCodes[L][k]==null){const q=pos(R[L],levelAngles[L][k]);dots+=`<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="4" fill="#3a3a42"/>`;}
 
   let chips='';
-  for(let L=0;L<=4;L++) for(let k=0;k<levelCodes[L].length;k++){
-    const code=levelCodes[L][k]; if(code==null) continue;
-    const q=pos(R[L],levelAngles[L][k]); chips+=svgChip(q.x,q.y,NR[L],code,nodeOpacity(L,k));
+  for(let L=0;L<=4;L++)for(let k=0;k<levelCodes[L].length;k++){
+    const code=levelCodes[L][k];if(code==null)continue;
+    const q=pos(R[L],levelAngles[L][k]);chips+=svgChip(q.x,q.y,NR[L],code,nodeOpacity(L,k));
   }
 
   let xmarks='';
-  for(const code in PERSON){ if(!isEliminated(code)) continue; const dn=deepestNode(code); const q=pos(R[dn.L],levelAngles[dn.L][dn.k]); xmarks+=redX(q.x,q.y,NR[dn.L]); }
+  for(const code in PERSON){if(!isEliminated(code))continue;const dn=deepestNode(code);const q=pos(R[dn.L],levelAngles[dn.L][dn.k]);xmarks+=redX(q.x,q.y,NR[dn.L]);}
 
   let names='';
   for(let i=0;i<ORDER.length;i++){
-    const code=ORDER[i]; if(!PERSON[code]) continue;
-    const [lx,ly]=polar(R[0]+36, levelAngles[0][i]);
-    const dim = decided(0,i)&&!advanced(0,i)?0.5:1;
+    const code=ORDER[i];if(!PERSON[code])continue;
+    const[lx,ly]=polar(R[0]+36,levelAngles[0][i]);
+    const dim=decided(0,i)&&!advanced(0,i)?0.5:1;
     names+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" font-family="Barlow Condensed" font-size="18" font-weight="700" letter-spacing="0.05em" text-anchor="middle" dominant-baseline="central" fill="#f4d488" opacity="${dim}">${PERSON[code].toUpperCase()}</text>`;
   }
 
-  const champ=RESULTS.champ[0];
+  const champ=D.results.champ[0];
   // Actual World Cup trophy graphic (trophy.svg, CC BY-SA — credited in footer)
   const TW=110.59019, TH=294.96652;
   const trophyImg=(h,cy)=>{const w=h*TW/TH;return `<image href="trophy.svg" x="${(CX-w/2).toFixed(1)}" y="${(cy-h/2).toFixed(1)}" width="${w.toFixed(1)}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;};
   let center=trophyImg(104,CY);
   if(champ){
     center=trophyImg(66,CY-28)
-      + svgChip(CX,CY+30,22,champ,1)
-      + (PERSON[champ]?`<text x="${CX}" y="${CY+62}" font-family="Barlow Condensed" font-size="15" font-weight="700" letter-spacing="0.08em" text-anchor="middle" fill="#f4d488">${PERSON[champ].toUpperCase()}</text>`:'');
+      +svgChip(CX,CY+30,22,champ,1)
+      +(PERSON[champ]?`<text x="${CX}" y="${CY+62}" font-family="Barlow Condensed" font-size="15" font-weight="700" letter-spacing="0.08em" text-anchor="middle" fill="#f4d488">${PERSON[champ].toUpperCase()}</text>`:'');
   }
 
   return `<svg viewBox="0 0 980 980" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="2026 World Cup radial bracket">
     ${defs}${glow}<g>${conns}</g><g>${dots}</g><g>${chips}</g><g>${xmarks}</g><g>${names}</g>${center}</svg>`;
 }
 
-/* ============================================================
-   DRAFT ORDER (champion first)
-   ============================================================ */
-const ROUND_SHORT=['R32','R16','QF','SF','Final','🏆'];
-function winCount(code){let n=0;for(let L=1;L<=5;L++)if(levelCodes[L].includes(code))n++;return n;}
-/* Elimination order per Coding Rules: eliminated-earliest first, then within
-   the same round worst GD first, then the manual embarrassment tiebreak.
-   Rule #2's "embarrassing" judgment comes from ELIM_TIEBREAK, not computation. */
-function computeElimOrder(){
-  const gd=c=>GD[c]??0, tb=c=>ELIM_TIEBREAK[c]??0;
-  return Object.keys(PERSON).filter(isEliminated)
-    .sort((a,b)=> winCount(a)-winCount(b) || gd(a)-gd(b) || tb(a)-tb(b));
-}
+/* ---------- draft order ---------- */
 function draftRows(){
   const assigned=Object.keys(PERSON);
-  const out=RESULTS.elimOrder.filter(c=>assigned.includes(c));
-  const champ=(RESULTS.champ[0]&&assigned.includes(RESULTS.champ[0]))?RESULTS.champ[0]:null;
+  const out=D.results.elimOrder.filter(c=>assigned.includes(c));
+  const champ=(D.results.champ[0]&&assigned.includes(D.results.champ[0]))?D.results.champ[0]:null;
   const alive=assigned.filter(c=>!out.includes(c)&&c!==champ);
   const bottom=champ?champ:(alive.length===1?alive[0]:null);
   const pending=10-out.length-(bottom?1:0);
   const wtb=[];
   out.forEach(c=>wtb.push({code:c,kind:'out'}));
-  for(let i=0;i<pending;i++) wtb.push({kind:'pending'});
-  if(bottom) wtb.push({code:bottom,kind:champ?'champion':'survivor'});
+  for(let i=0;i<pending;i++)wtb.push({kind:'pending'});
+  if(bottom)wtb.push({code:bottom,kind:champ?'champion':'survivor'});
   return wtb.slice().reverse().map((s,i)=>({pick:i+1,...s}));
 }
 function buildDraft(){
@@ -334,25 +365,23 @@ function buildDraft(){
       return `<div class="dchip pending"><span class="dpick">${n}</span><span class="dbody"><span class="dpend">Still in</span></span></div>`;
     const t=TEAM[row.code];
     let tag;
-    if(row.kind==='champion') tag='🏆 Champion';
-    else if(row.kind==='survivor') tag='Still in';
-    else {const w=winCount(row.code); tag=w===4?'Runner-up':'Out · '+ROUND_SHORT[w];}
+    if(row.kind==='champion')tag='🏆 Champion';
+    else if(row.kind==='survivor')tag='Still in';
+    else{const w=winCount(row.code);tag=w===4?'Runner-up':'Out · '+ROUND_SHORT[w];}
     const cls=row.pick===1?'dchip top':'dchip';
     return `<div class="${cls}"><span class="dpick">${n}</span><span class="dflag">${t.f}</span><span class="dbody"><span class="dperson">${PERSON[row.code]}</span><span class="dtag">${tag}</span></span></div>`;
   }).join('');
 }
 
-/* ============================================================
-   UPCOMING MATCHES
-   ============================================================ */
-const ROUND_FULL={R32:'Round of 32',R16:'Round of 16'};
+/* ---------- upcoming matches ---------- */
+const ROUND_FULL={R32:'Round of 32',R16:'Round of 16',QF:'Quarter-final',SF:'Semi-final',F:'Final'};
 function statusWord(p){if(p>=70)return'Favored';if(p>=53)return'Slight edge';if(p>=47)return'Coin flip';if(p>=30)return'Underdog';return'Long shot';}
 function matchCard(m){
   const L=TEAM[m.L],O=TEAM[m.O],po=100-m.p;
-  const rcls=m.round==='R16'?'round r16':'round';
+  const rcls=m.round==='R32'?'round':'round r16';
   const live=m.live?`<span class="d"></span><span class="live">Today</span>`:'';
   return `<div class="match">
-    <div class="mtop"><span class="${rcls}">${ROUND_FULL[m.round]}</span><span class="when">${m.time}</span><span class="d"></span><span>${m.venue}</span><span class="d"></span><span>${m.tv}</span>${live}</div>
+    <div class="mtop"><span class="${rcls}">${ROUND_FULL[m.round]||m.round}</span><span class="when">${m.time}</span><span class="d"></span><span>${m.venue}</span><span class="d"></span><span>${m.tv}</span>${live}</div>
     <div class="mrow">
       <div class="side league"><span class="flag">${L.f}</span><span class="s-txt"><span class="country">${L.n}</span><span class="person">${m.person}</span><span class="status">${statusWord(m.p)}</span></span></div>
       <div class="oddswrap"><div class="odds-labels"><span class="pl">${m.p}%</span><span class="mid">to advance</span><span class="po">${po}%</span></div><div class="bar"><span class="fill-l" style="width:${m.p}%"></span><span class="fill-r" style="width:${po}%"></span></div></div>
@@ -361,14 +390,119 @@ function matchCard(m){
 }
 function buildSchedule(){
   let html='',day=null;
-  for(const m of MATCHES){ if(m.day!==day){html+=`<div class="day">${m.day}</div>`;day=m.day;} html+=matchCard(m); }
-  return html;
+  for(const m of D.matches){if(m.day!==day){html+=`<div class="day">${m.day}</div>`;day=m.day;}html+=matchCard(m);}
+  return html||`<div class="day">No matches scheduled</div>`;
 }
 
-RESULTS.elimOrder = computeElimOrder();   // apply Coding Rules before drawing
-document.getElementById('draft').innerHTML = buildDraft();
-document.getElementById('bracket').innerHTML = buildSVG();
-document.getElementById('schedule').innerHTML = buildSchedule();
+/* ---------- potential outcomes ---------- */
+// round two teams would meet in: smallest L where their level-0 indices share an ancestor
+function meetLevel(codeA,codeB){
+  let i=ORDER.indexOf(codeA),j=ORDER.indexOf(codeB),L=0;
+  while(i!==j){i>>=1;j>>=1;L++;}
+  return L;
+}
+function nextOpponent(code){
+  const dn=deepestNode(code);
+  if(dn.L>=5)return null;
+  const sib=dn.k^1;
+  const sc=levelCodes[dn.L][sib];
+  if(sc)return{label:TEAM[sc].n,flag:TEAM[sc].f,person:PERSON[sc]||null};
+  // sibling undecided → winner of the two children below it
+  if(dn.L>0){
+    const c1=levelCodes[dn.L-1][2*sib],c2=levelCodes[dn.L-1][2*sib+1];
+    if(c1&&c2)return{label:`${TEAM[c1].n} / ${TEAM[c2].n}`,flag:'',person:null};
+  }
+  return{label:'TBD',flag:'',person:null};
+}
+function buildOutcomes(){
+  const assigned=Object.keys(PERSON);
+  const out=D.results.elimOrder.filter(c=>assigned.includes(c));
+  const champ=D.results.champ[0];
+  const alive=assigned.filter(c=>!out.includes(c)&&c!==champ);
+  const nextOutPick=10-out.length; // next league team eliminated gets this pick
+  if(alive.length===0)return`<div class="day">Bracket settled — see the draft order above.</div>`;
+
+  // stable order: by current match schedule appearance
+  const schedOrder=D.matches.map(m=>m.L);
+  alive.sort((a,b)=>{
+    const ia=schedOrder.indexOf(a),ib=schedOrder.indexOf(b);
+    return (ia<0?99:ia)-(ib<0?99:ib);
+  });
+
+  return alive.map(code=>{
+    const t=TEAM[code],dn=deepestNode(code);
+    const stage=ROUND_AT[dn.L];
+    const m=D.matches.find(x=>x.L===code);
+    const opp=nextOpponent(code);
+    // earliest possible league-vs-league meeting among alive members
+    let clash=null;
+    for(const other of alive){
+      if(other===code)continue;
+      const L=meetLevel(code,other);
+      if(L<=dn.L)continue; // already impossible/passed
+      if(!clash||L<clash.L)clash={L,codes:[other]};
+      else if(L===clash.L)clash.codes.push(other);
+    }
+    const clashTxt=clash
+      ?`${clash.codes.map(c=>`${PERSON[c]} (${TEAM[c].n})`).join(' or ')} <span class="sub">in ${MEET_NAME[clash.L]}</span>`
+      :`<span class="sub">None left on their side</span>`;
+    const nextTxt=m
+      ?`${opp.label} <span class="sub">· ${m.time.replace(' PT','')} ${m.day.split(' · ')[0].slice(0,3)}</span>`
+      :(opp?opp.label:'—');
+    const oddsRow=m?`<div class="orow"><span class="ok">Advance odds</span><span class="ov gold">${m.p}%</span></div>`:'';
+
+    // pick squares: 1..nextOutPick open, rest taken
+    let squares='';
+    for(let p=1;p<=10;p++){
+      const cls=p<=nextOutPick?'pk open':'pk gone';
+      squares+=`<span class="${cls}">${p<=nextOutPick?p:''}</span>`;
+    }
+
+    return `<div class="ocard">
+      <div class="ohead"><span class="oflag">${t.f}</span>
+        <span class="oname"><span class="operson">${PERSON[code]}</span><span class="oteam">${t.n}</span></span>
+        <span class="ostage">In · ${stage}</span></div>
+      <div class="orow"><span class="ok">Next match</span><span class="ov">${nextTxt}</span></div>
+      ${oddsRow}
+      <div class="orow"><span class="ok">League clash</span><span class="ov">${clashTxt}</span></div>
+      <div class="picks">${squares}</div>
+      <div class="plegend">Best pick #1 · if out next, pick #${nextOutPick}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- atmosphere motes ---------- */
+function buildMotes(){
+  const atmo=document.querySelector('.atmo');
+  for(let i=0;i<16;i++){
+    const m=document.createElement('span');m.className='mote';
+    const s=(Math.random()*2.2+1).toFixed(1);
+    m.style.cssText=`left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*80+10).toFixed(1)}%;width:${s}px;height:${s}px;--dur:${(Math.random()*9+8).toFixed(1)}s;--delay:${(Math.random()*10).toFixed(1)}s;--peak:${(Math.random()*0.28+0.08).toFixed(2)}`;
+    atmo.appendChild(m);
+  }
+}
+
+/* ---------- boot ---------- */
+function render(){
+  buildLevels();
+  document.getElementById('draft').innerHTML=buildDraft();
+  document.getElementById('bracket').innerHTML=buildSVG();
+  document.getElementById('schedule').innerHTML=buildSchedule();
+  document.getElementById('outcomes').innerHTML=buildOutcomes();
+  document.getElementById('snapshot').textContent='Updated: '+D.snapshot;
+}
+async function boot(){
+  D=FALLBACK;
+  try{
+    const r=await fetch('./results.json?t='+Date.now(),{cache:'no-store'});
+    if(r.ok){const j=await r.json();if(j&&j.results)D=j;}
+  }catch(e){/* offline or file:// — fallback stands */}
+  render();
+  buildMotes();
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.08});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+}
+boot();
 </script>
 </body>
 </html>
