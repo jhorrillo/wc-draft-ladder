@@ -216,19 +216,19 @@ const MEET_NAME=['','the R32','the R16','the QF','the semis','the Final'];
 const FALLBACK = {
   snapshot:"July 2, 2026",
   results:{
-    r32:['FRA','PAR','CAN','MAR', null,'ESP','USA','BEL',
+    r32:['FRA','PAR','CAN','MAR', 'POR','ESP','USA','BEL',
          'BRA','NOR','MEX','ENG', null,null,null,null],
     r16:[null,null,null,null,null,null,null,null],
     qf:[null,null,null,null], sf:[null,null], champ:[null],
     elimOrder:['GER','NED']
   },
   matches:[
-    {round:'R32',day:'Thursday · July 2',time:'4:00 PM PT',venue:'BMO Field · Toronto',tv:'FOX',live:true,L:'POR',person:'Daniel',O:'CRO',p:70},
     {round:'R32',day:'Friday · July 3',time:'3:00 PM PT',venue:'Hard Rock Stadium · Miami',tv:'FOX',L:'ARG',person:'Alex',O:'CPV',p:93},
     {round:'R16',day:'Saturday · July 4',time:'10:00 AM PT',venue:'NRG Stadium · Houston',tv:'FOX',L:'MAR',person:'Jason',O:'CAN',p:76},
     {round:'R16',day:'Saturday · July 4',time:'2:00 PM PT',venue:'Lincoln Financial Field · Philadelphia',tv:'FOX',L:'FRA',person:'Adam',O:'PAR',p:84},
     {round:'R16',day:'Sunday · July 5',time:'1:00 PM PT',venue:'MetLife Stadium · New Jersey',tv:'FOX',L:'BRA',person:'Jordan',O:'NOR',p:72},
     {round:'R16',day:'Sunday · July 5',time:'5:00 PM PT',venue:'Estadio Azteca · Mexico City',tv:'FOX',L:'ENG',person:'Chris',O:'MEX',p:57},
+    {round:'R16',day:'Monday · July 6',time:'12:00 PM PT',venue:'AT&T Stadium · Dallas',tv:'FOX',L:'ESP',person:'Cory',O:'POR',p:65},
     {round:'R16',day:'Monday · July 6',time:'5:00 PM PT',venue:'Lumen Field · Seattle',tv:'FOX',L:'BEL',person:'Gordy',O:'USA',p:50}
   ]
 };
@@ -384,7 +384,7 @@ function matchCard(m){
     <div class="mrow">
       <div class="side league"><span class="flag">${L.f}</span><span class="s-txt"><span class="country">${L.n}</span><span class="person">${m.person}</span><span class="status">${statusWord(m.p)}</span></span></div>
       <div class="oddswrap"><div class="odds-labels"><span class="pl">${m.p}%</span><span class="mid">to advance</span><span class="po">${po}%</span></div><div class="bar"><span class="fill-l" style="width:${m.p}%"></span><span class="fill-r" style="width:${po}%"></span></div></div>
-      <div class="side opp"><span class="s-txt right"><span class="country">${O.n}</span><span class="olabel">Opponent</span></span><span class="flag">${O.f}</span></div>
+      <div class="side opp"><span class="s-txt right"><span class="country">${O.n}</span>${PERSON[m.O]?`<span class="person">${PERSON[m.O]}</span><span class="status">${statusWord(po)}</span>`:`<span class="olabel">Opponent</span>`}</span><span class="flag">${O.f}</span></div>
     </div></div>`;
 }
 function buildSchedule(){
@@ -422,7 +422,7 @@ function buildOutcomes(){
   if(alive.length===0)return`<div class="day">Bracket settled — see the draft order above.</div>`;
 
   // stable order: by current match schedule appearance
-  const schedOrder=D.matches.map(m=>m.L);
+  const schedOrder=D.matches.flatMap(m=>[m.L,m.O]);
   alive.sort((a,b)=>{
     const ia=schedOrder.indexOf(a),ib=schedOrder.indexOf(b);
     return (ia<0?99:ia)-(ib<0?99:ib);
@@ -431,7 +431,8 @@ function buildOutcomes(){
   return alive.map(code=>{
     const t=TEAM[code],dn=deepestNode(code);
     const stage=ROUND_AT[dn.L];
-    const m=D.matches.find(x=>x.L===code);
+    let m=D.matches.find(x=>x.L===code);
+    if(!m){const om=D.matches.find(x=>x.O===code);if(om)m={...om,p:100-om.p};} // league-vs-league: this member is the O side
     const opp=nextOpponent(code);
     // earliest possible league-vs-league meeting among alive members
     let clash=null;
