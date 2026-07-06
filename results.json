@@ -1,17 +1,16 @@
 {
-  "snapshot": "July 4, 2026",
+  "snapshot": "July 5, 2026",
   "results": {
     "r32": ["FRA","PAR","CAN","MAR", "POR","ESP","USA","BEL",
             "BRA","NOR","MEX","ENG", "ARG","EGY","SUI","COL"],
-    "r16": ["FRA","MAR",null,null,null,null,null,null],
+    "r16": ["FRA","MAR",null,null,"NOR",null,null,null],
     "qf":  [null,null,null,null],
     "sf":  [null,null],
     "champ": [null],
-    "elimOrder": ["GER","NED"]
+    "elimOrder": ["GER","NED","BRA"]
   },
   "matches": [
-    {"round":"R16","day":"Sunday · July 5","time":"1:00 PM PT","venue":"MetLife Stadium · New Jersey","tv":"FOX","L":"BRA","person":"Jordan","O":"NOR","p":72},
-    {"round":"R16","day":"Sunday · July 5","time":"5:00 PM PT","venue":"Estadio Azteca · Mexico City","tv":"FOX","L":"ENG","person":"Chris","O":"MEX","p":57},
+    {"round":"R16","day":"Sunday · July 5","time":"6:00 PM PT","venue":"Estadio Azteca · Mexico City","tv":"FOX","live":true,"L":"ENG","person":"Chris","O":"MEX","p":57},
     {"round":"R16","day":"Monday · July 6","time":"12:00 PM PT","venue":"AT&T Stadium · Dallas","tv":"FOX","L":"ESP","person":"Cory","O":"POR","p":65},
     {"round":"R16","day":"Monday · July 6","time":"5:00 PM PT","venue":"Lumen Field · Seattle","tv":"FOX","L":"BEL","person":"Gordy","O":"USA","p":50},
     {"round":"R16","day":"Tuesday · July 7","time":"9:00 AM PT","venue":"Mercedes-Benz Stadium · Atlanta","tv":"FOX","L":"ARG","person":"Alex","O":"EGY","p":85},
