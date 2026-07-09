@@ -217,16 +217,15 @@ const MEET_NAME=['','the R32','the R16','the QF','the semis','the Final'];
 
 /* ---------- fallback data (used if results.json can't be fetched) ---------- */
 const FALLBACK = {
-  snapshot:"July 8, 2026",
+  snapshot:"July 9, 2026",
   results:{
     r32:['FRA','PAR','CAN','MAR', 'POR','ESP','USA','BEL',
          'BRA','NOR','MEX','ENG', 'ARG','EGY','SUI','COL'],
     r16:['FRA','MAR','ESP','BEL','NOR','ENG','ARG','SUI'],
-    qf:[null,null,null,null], sf:[null,null], champ:[null],
-    elimOrder:['GER','NED','BRA','POR']
+    qf:['FRA',null,null,null], sf:[null,null], champ:[null],
+    elimOrder:['GER','NED','BRA','POR','MAR']
   },
   matches:[
-    {round:'QF',day:'Thursday · July 9',time:'1:00 PM PT',venue:'Gillette Stadium · Foxborough',tv:'FOX',L:'FRA',person:'Adam',O:'MAR',p:75},
     {round:'QF',day:'Friday · July 10',time:'12:00 PM PT',venue:'SoFi Stadium · Los Angeles',tv:'FOX',L:'ESP',person:'Cory',O:'BEL',p:75},
     {round:'QF',day:'Saturday · July 11',time:'2:00 PM PT',venue:'Hard Rock Stadium · Miami',tv:'FOX',L:'ENG',person:'Chris',O:'NOR',p:66},
     {round:'QF',day:'Saturday · July 11',time:'6:00 PM PT',venue:'Arrowhead Stadium · Kansas City',tv:'FOX',L:'ARG',person:'Alex',O:'SUI',p:72}
